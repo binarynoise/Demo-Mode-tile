@@ -1,18 +1,20 @@
 <resources>
     <string name="app_name">Demo Mode tile</string>
-    <string name="demo_mode">Demo mode</string>
+    <string name="demo_mode">Demo Mode</string>
     <string name="permission_request_title">Demo mode tile permission request</string>
-    <string name="dump_permission_msg">For this app to work it needs DUMP permission to be granted. Unfortunately that is only possible through adb shell from your computer:\n\nadb -d shell pm grant com.franco.demomode android.permission.DUMP\n\nFor transparency this app\'s source code is available.</string>
-    <string name="write_secure_settings_permission_msg">For this app to work it needs WRITE_SECURE_SETTINGS permission to be granted. Unfortunately that is only possible through adb shell from your computer:\n\nadb -d shell pm grant com.franco.demomode android.permission.WRITE_SECURE_SETTINGS\n\nFor transparency this app\'s source code is available.</string>
+    <string name="adb_instructions">The permissions can be granted using your computer with adb:\n\nadb -d shell pm grant com.franco.demomode android.permission.DUMP\nadb -d shell pm grant com.franco.demomode android.permission.WRITE_SECURE_SETTINGS</string>
     <string name="ok">OK</string>
     <string name="dump_permission">DUMP</string>
     <string name="write_secure_settings_permission">WRITE_SECURE_SETTINGS</string>
     <string name="not_granted">Not granted</string>
     <string name="permissions">Permissions</string>
     <string name="granted">Granted</string>
-    <string name="social">Follow me</string>
     <string name="source_code_title">Source code</string>
-    <string name="permissions_need_to_be_granted">Both permissions need to be granted for the tile to work</string>
-    <string name="demo_mode_allowed_title">Tip!</string>
-    <string name="demo_mode_allowed_message">Make sure you allow demo mode to run by enabling it on Android settings, otherwise this tile might not work</string>
+    <string name="permissions_need_to_be_granted">Both permissions need to be granted for the tile to work.</string>
+    <string name="permissions_have_been_granted">Both permissions were successfully granted with root!</string>
+    <string name="permissions_could_not_be_granted">Permissions could not be granted. Make sure that you have rooted your phone or try with adb.</string>
+    <string name="grant_permissions_with_root">Use root to grant the permissions</string>
+    <string name="show_instructions_for_adb">Show instructions for adb</string>
+    <string name="source_code_available_for_transparency">For transparency this app\'s source code is available at GitHub</string>
+    <string name="source_code_summary">Click here view the source:\ngithub.com/franciscofranco/Demo-Mode-tile</string>
 </resources>

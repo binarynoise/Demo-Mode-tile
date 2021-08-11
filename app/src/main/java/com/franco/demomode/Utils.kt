@@ -1,140 +1,113 @@
 package com.franco.demomode
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.provider.Settings
 import android.provider.Settings.SettingNotFoundException
-import android.view.View
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class Utils {
-    suspend fun enableDemoMode(context: Context) {
-        withContext(Dispatchers.IO) {
-            if (!isDemoModeAllowed(context)) {
-                Settings.Global.putInt(context.contentResolver, DEMO_MODE_ALLOWED, 1)
-            }
-
-            Settings.Global.putInt(context.contentResolver, DEMO_MODE_ON, 1)
+object Utils {
+    private val UI_DEMO_ACTION = "com.android.systemui.demo"
+    private const val DEMO_MODE_ALLOWED = "sysui_demo_allowed"
+    private const val DEMO_MODE_ON = "sysui_tuner_demo_on"
+    
+    suspend fun enableDemoMode(context: Context) = withContext(Dispatchers.IO) {
+        if (!isDemoModeAllowed(context)) {
+            Settings.Global.putInt(context.contentResolver, DEMO_MODE_ALLOWED, 1)
         }
-
+        
+        Settings.Global.putInt(context.contentResolver, DEMO_MODE_ON, 1)
+        
         // clock with the latest release string
-        val clock = Intent("com.android.systemui.demo")
+        val clock = Intent(UI_DEMO_ACTION)
         clock.putExtra("command", "clock")
         clock.putExtra("hhmm", "1100")
         context.sendBroadcast(clock)
-
+        
         // battery icon needs to be perfect
-        val battery = Intent("com.android.systemui.demo")
+        val battery = Intent(UI_DEMO_ACTION)
         battery.putExtra("command", "battery")
         battery.putExtra("level", "100")
         battery.putExtra("plugged", "false")
         context.sendBroadcast(battery)
-
+        
         // signal icon
-        val data = Intent("com.android.systemui.demo")
+        val data = Intent(UI_DEMO_ACTION)
         data.putExtra("command", "network")
         data.putExtra("mobile", "show")
         data.putExtra("datatype", "hide")
         data.putExtra("level", "4")
         context.sendBroadcast(data)
-
+        
         // mock sim carrier connection
-        val signal = Intent("com.android.systemui.demo")
+        val signal = Intent(UI_DEMO_ACTION)
         signal.putExtra("command", "network")
         signal.putExtra("fully", "true")
         context.sendBroadcast(signal)
-
+        
         // WiFi icon
-        val wifi = Intent("com.android.systemui.demo")
+        val wifi = Intent(UI_DEMO_ACTION)
         wifi.putExtra("command", "network")
         wifi.putExtra("wifi", "show")
         wifi.putExtra("level", "4")
         context.sendBroadcast(wifi)
-
+        
         // rip icons
-        val miscNetwork = Intent("com.android.systemui.demo")
+        val miscNetwork = Intent(UI_DEMO_ACTION)
         miscNetwork.putExtra("command", "network")
         miscNetwork.putExtra("airplane", "hide")
         miscNetwork.putExtra("nosim", "hide")
         miscNetwork.putExtra("sims", 1)
         context.sendBroadcast(miscNetwork)
-
-
+        
         // if there's one thing I hate is cluttered statusbar with notifs
-        val notifs = Intent("com.android.systemui.demo")
+        val notifs = Intent(UI_DEMO_ACTION)
         notifs.putExtra("command", "notifications")
         notifs.putExtra("visible", "false")
         context.sendBroadcast(notifs)
-
+        
         // goodbye more icons!
-        val miscIcons = Intent("com.android.systemui.demo")
+        val miscIcons = Intent(UI_DEMO_ACTION)
         miscIcons.putExtra("command", "status")
         miscIcons.putExtra("bluetooth", "hide")
         miscIcons.putExtra("volume", "hide")
         miscIcons.putExtra("mute", "hide")
         context.sendBroadcast(miscIcons)
     }
-
+    
     suspend fun disableDemoMode(context: Context) {
         withContext(Dispatchers.IO) {
             Settings.Global.putInt(context.contentResolver, DEMO_MODE_ON, 0)
         }
-
-        val enableDemoMode = Intent("com.android.systemui.demo")
-        enableDemoMode.putExtra("command", "exit")
-        context.sendBroadcast(enableDemoMode)
+        val disableDemoMode = Intent(UI_DEMO_ACTION)
+        disableDemoMode.putExtra("command", "exit")
+        context.sendBroadcast(disableDemoMode)
     }
-
+    
     suspend fun isDemoModeAllowed(context: Context): Boolean = withContext(Dispatchers.IO) {
         try {
             Settings.Global.getInt(context.contentResolver, DEMO_MODE_ALLOWED) == 1
         } catch (e: SettingNotFoundException) {
-            e.printStackTrace()
+            if (BuildConfig.DEBUG) e.printStackTrace()
             false
         }
     }
-
+    
     suspend fun isDemoModeOn(context: Context): Boolean = withContext(Dispatchers.IO) {
         Settings.Global.getInt(context.contentResolver, DEMO_MODE_ON, 0) != 0
     }
-
+    
     suspend fun isDumpPermissionGranted(context: Context): Boolean = withContext(Dispatchers.IO) {
         (context.packageManager.checkPermission(Manifest.permission.DUMP, context.packageName)
-                == PackageManager.PERMISSION_GRANTED)
+            == PackageManager.PERMISSION_GRANTED)
     }
-
+    
     suspend fun isWriteSecureSettingsPermissionGranted(context: Context): Boolean = withContext(Dispatchers.IO) {
         (context.packageManager.checkPermission(
-                Manifest.permission.WRITE_SECURE_SETTINGS, context.packageName)
-                == PackageManager.PERMISSION_GRANTED)
-    }
-
-    fun setLightNavBar(view: View) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            var flags = view.systemUiVisibility
-            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            view.systemUiVisibility = flags
-            (view.context as Activity).window.navigationBarColor = ContextCompat.getColor(view.context, R.color.primary)
-        }
-    }
-
-    fun clearLightNavBar(view: View) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            var flags = view.systemUiVisibility
-            flags = flags and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
-            view.systemUiVisibility = flags
-        }
-    }
-
-    companion object {
-        private const val DEMO_MODE_ALLOWED = "sysui_demo_allowed"
-        private const val DEMO_MODE_ON = "sysui_tuner_demo_on"
-        const val MISSING_PERMISSION = "missing_permission"
+            Manifest.permission.WRITE_SECURE_SETTINGS, context.packageName)
+            == PackageManager.PERMISSION_GRANTED)
     }
 }

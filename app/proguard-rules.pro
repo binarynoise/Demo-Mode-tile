@@ -7,11 +7,17 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# Add any project specific keep options here:
+-dontobfuscate
+# -dontpreverify
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+-keepattributes SourceFile, LineNumberTable, Exception, *Annotation*, InnerClasses, EnclosingMethod, Signature
+
+-keepclassmembers, allowoptimization enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keepclassmembers, allowoptimization class ** extends androidx.viewbinding.ViewBinding {
+	public static ** inflate(android.view.LayoutInflater);
+	public static ** bind(android.view.View);
+}

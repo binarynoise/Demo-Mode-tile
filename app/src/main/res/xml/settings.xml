@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <androidx.preference.Preference
-        android:icon="@drawable/code_braces"
-        android:summary="https://goo.gl/6eVCjr"
-        android:title="@string/source_code_title">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="https://goo.gl/6eVCjr" />
-    </androidx.preference.Preference>
-
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
     <androidx.preference.PreferenceCategory android:title="@string/permissions">
-
+        
+        <Preference android:summary="@string/permissions_need_to_be_granted" />
+        
         <androidx.preference.Preference
             android:icon="@drawable/bug"
             android:key="dump_permission"
-            android:title="@string/dump_permission" />
-
+            android:title="@string/dump_permission"
+            tools:summary="@string/not_granted" />
+        
         <androidx.preference.Preference
             android:icon="@drawable/ic_settings_black_24dp"
             android:key="write_secure_settings"
-            android:title="@string/write_secure_settings_permission" />
-    </androidx.preference.PreferenceCategory>
-
-    <androidx.preference.PreferenceCategory android:title="@string/social">
+            android:title="@string/write_secure_settings_permission"
+            tools:summary="@string/not_granted" />
+        
         <androidx.preference.Preference
-            android:icon="@drawable/twitter"
-            android:title="Twitter">
+            android:key="show_adb_instructions"
+            android:title="@string/show_instructions_for_adb" />
+        
+        <androidx.preference.Preference
+            android:key="apply_with_root"
+            android:title="@string/grant_permissions_with_root" />
+    </androidx.preference.PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/source_code_title">
+        
+        <Preference
+            android:icon="@drawable/code_braces"
+            android:summary="@string/source_code_summary"
+            android:title="@string/source_code_available_for_transparency">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://twitter.com/franciscof_1990" />
-        </androidx.preference.Preference>
-    </androidx.preference.PreferenceCategory>
+                android:data="https://github.com/franciscofranco/Demo-Mode-tile" />
+        </Preference>
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
