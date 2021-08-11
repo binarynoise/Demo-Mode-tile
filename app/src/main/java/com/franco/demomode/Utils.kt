@@ -40,6 +40,8 @@ object Utils {
         data.putExtra("mobile", "show")
         data.putExtra("datatype", "hide")
         data.putExtra("level", "4")
+        // probable fix for https://github.com/franciscofranco/Demo-Mode-tile/issues/7
+        data.putExtra("sims", 1)
         context.sendBroadcast(data)
         
         // mock sim carrier connection
